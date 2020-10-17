@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "224023221880",
+    "firebase_url": "https://tsa-gram.firebaseio.com",
+    "project_id": "tsa-gram",
+    "storage_bucket": "tsa-gram.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:224023221880:android:5d28c52ad4fa3c012eff8d",
+        "android_client_info": {
+          "package_name": "com.tsa.tsaGram"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "224023221880-1hjmrs5u78ks3rrtom6h6cpn03qhi40i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAd7hNsirOB4BQH1fkUGt81lh2mn6VdWeg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "224023221880-1hjmrs5u78ks3rrtom6h6cpn03qhi40i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "224023221880-0boa78ins7k73gdjbgkt2v79bh85i4p7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tsa.tsaGram"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
