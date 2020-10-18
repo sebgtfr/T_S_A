@@ -9,17 +9,19 @@ class Auth extends ChangeNotifier {
     return _auth.currentUser;
   }
 
-  Future signIn(String email, String password) async {
+  Future<dynamic> signIn(String email, String password) async {
     return await _auth
         .signInWithEmailAndPassword(email: email, password: password)
         .then((UserCredential user) {
       notifyListeners();
       print(_auth.currentUser);
       return true;
-    }).catchError((e) {
-      print('error firebase: ' + e);
-      return false;
     });
+    // .catchError((e) {
+    //   print('Firebase: Failed with error code: ${e.code}');
+    //   // print(e.message);
+    //   return false;
+    // });
   }
 
   Future signOut() async {
