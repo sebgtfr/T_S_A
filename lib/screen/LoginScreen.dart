@@ -8,7 +8,20 @@ import 'package:tsa_gram/utils.dart';
 final TextEditingController emailController = TextEditingController();
 final TextEditingController passwordController = TextEditingController();
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool chooseForm = true;
+
+  void changeForm() {
+    setState(() {
+      chooseForm = !chooseForm;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,9 +53,31 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SignInForm(),
+            SizedBox(height: 10),
+            chooseForm ? SignInForm() : SignUpForm(),
+            GestureDetector(
+              onTap: () {
+                changeForm();
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(chooseForm
+                      ? "Don't have an Account ? "
+                      : "Already have an "
+                          "Account ? "),
+                  Text(
+                    chooseForm ? "Sign Up" : "Sign In",
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .headline1
+                        .copyWith(fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
             SignOut(),
-            SizedBox(height: 300),
+            SizedBox(height: 100),
             Consumer<Auth>(
               builder: (BuildContext context, Auth auth, Widget child) =>
                   Text((auth.user != null)
@@ -69,7 +104,7 @@ class SignOut extends StatelessWidget {
               .then((value) => {
                     if (value == null)
                       Scaffold.of(context).showSnackBar(
-                          SnackBar(content: Text('Deconnected !')))
+                          SnackBar(content: Text('Deconnected, bye !')))
                   })
               .catchError((e) {
             print(e);
@@ -95,7 +130,6 @@ class SignInFormState extends State<SignInForm> {
 
   @override
   Widget build(BuildContext context) {
-    // Build a Form widget using the _formKey created above.
     return Form(
       key: _formKey,
       child: Container(
@@ -111,15 +145,16 @@ class SignInFormState extends State<SignInForm> {
               builder: (BuildContext context, Auth auth, Widget child) =>
                   RaisedButton(
                 onPressed: () {
-                  print(_formKey);
                   if (_formKey.currentState.validate()) {
                     auth
                         .signIn(emailController.text, passwordController.text)
                         .then((value) => {
                               if (value == true)
                                 Scaffold.of(context).showSnackBar(SnackBar(
-                                    content: Text('Connexion '
-                                        'réussi !')))
+                                    content: auth.user.displayName != null
+                                        ? Text(
+                                            'Welcome back ${auth.user.displayName} !')
+                                        : Text('Welcome !')))
                             })
                         .catchError((e) {
                       print(e);
@@ -128,7 +163,7 @@ class SignInFormState extends State<SignInForm> {
                     });
                   }
                 },
-                child: Text('Login'),
+                child: Text('Sign In'),
               ),
             ),
           ],
@@ -147,7 +182,80 @@ class SignInFormState extends State<SignInForm> {
             labelText: labelText,
             icon: Icon(
               icon,
-              color: Colors.blueGrey,
+              color: Color(0xFF4C5359), //color of baleine
+            )),
+        validator: (value) {
+          if (value.isEmpty)
+            return 'This field must not be empty.';
+          else
+            return null;
+        });
+  }
+}
+
+class SignUpForm extends StatefulWidget {
+  @override
+  SignUpFormState createState() {
+    return SignUpFormState();
+  }
+}
+
+class SignUpFormState extends State<SignUpForm> {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 30),
+        child: Column(
+          children: <Widget>[
+            _buildTextField(
+                emailController, 'Email', Icons.account_circle, false),
+            SizedBox(height: 10),
+            _buildTextField(passwordController, 'Password', Icons.lock, true),
+            SizedBox(height: 10),
+            Consumer<Auth>(
+              builder: (BuildContext context, Auth auth, Widget child) =>
+                  RaisedButton(
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    auth
+                        .signUp(emailController.text, passwordController.text)
+                        .then((value) => {
+                              if (value == true)
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                    content:
+                                        Text('Account created, welcome !')))
+                            })
+                        .catchError((e) {
+                      print(e);
+                      Scaffold.of(context)
+                          .showSnackBar(SnackBar(content: Text(e.message)));
+                    });
+                  }
+                },
+                child: Text('Sign Up'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _buildTextField(TextEditingController controller, String labelText,
+      IconData icon, bool obscured) {
+    return TextFormField(
+        controller: controller,
+        obscureText: obscured,
+        decoration: InputDecoration(
+            // contentPadding: EdgeInsets.symmetric(horizontal: 10),
+            labelText: labelText,
+            icon: Icon(
+              icon,
+              color: Color(0xFF4C5359), //color of baleine
             )),
         validator: (value) {
           if (value.isEmpty)
