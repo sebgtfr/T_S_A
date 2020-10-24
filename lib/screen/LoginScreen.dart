@@ -5,8 +5,31 @@ import 'package:tsa_gram/common/Layout.dart';
 import 'package:tsa_gram/models/Auth/Auth.dart';
 import 'package:tsa_gram/utils.dart';
 
-final TextEditingController emailController = TextEditingController();
-final TextEditingController passwordController = TextEditingController();
+final TextEditingController emailSignInController = TextEditingController();
+final TextEditingController passwordSignInController = TextEditingController();
+final TextEditingController emailSignUpController = TextEditingController();
+final TextEditingController passwordSignUpController = TextEditingController();
+final TextEditingController emailForgotController = TextEditingController();
+
+_buildTextField(TextEditingController controller, String labelText,
+    IconData icon, bool obscured) {
+  return TextFormField(
+      controller: controller,
+      obscureText: obscured,
+      decoration: InputDecoration(
+          // contentPadding: EdgeInsets.symmetric(horizontal: 10),
+          labelText: labelText,
+          icon: Icon(
+            icon,
+            color: Color(0xFF4C5359), //color of baleine
+          )),
+      validator: (value) {
+        if (value.isEmpty)
+          return 'This field must not be empty.';
+        else
+          return null;
+      });
+}
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -55,6 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(height: 10),
             chooseForm ? SignInForm() : SignUpForm(),
+            SizedBox(height: 20),
             GestureDetector(
               onTap: () {
                 changeForm();
@@ -76,6 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             ),
+            /*SizedBox(height: 10),
             SignOut(),
             SizedBox(height: 100),
             Consumer<Auth>(
@@ -84,35 +109,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ? 'User: ' + auth.user.email
                       : 'Not '
                           'logged'),
-            ),
-            SizedBox(height: 20),
+            ),*/
+            SizedBox(height: 50),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class SignOut extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<Auth>(
-      builder: (BuildContext context, Auth auth, Widget child) => RaisedButton(
-        onPressed: () {
-          auth
-              .signOut()
-              .then((value) => {
-                    if (value == null)
-                      Scaffold.of(context).showSnackBar(
-                          SnackBar(content: Text('Deconnected, bye !')))
-                  })
-              .catchError((e) {
-            print(e);
-            Scaffold.of(context)
-                .showSnackBar(SnackBar(content: Text(e.message)));
-          });
-        },
-        child: Text('Logout'),
       ),
     );
   }
@@ -137,59 +137,73 @@ class SignInFormState extends State<SignInForm> {
         child: Column(
           children: <Widget>[
             _buildTextField(
-                emailController, 'Email', Icons.account_circle, false),
+                emailSignInController, 'Email', Icons.account_circle, false),
             SizedBox(height: 10),
-            _buildTextField(passwordController, 'Password', Icons.lock, true),
+            _buildTextField(
+                passwordSignInController, 'Password', Icons.lock, true),
             SizedBox(height: 10),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Container(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ForgotScreen()));
+                  },
+                  child: Text(
+                    'Forgot your password ?',
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
             Consumer<Auth>(
               builder: (BuildContext context, Auth auth, Widget child) =>
-                  RaisedButton(
+                  MaterialButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                    side: BorderSide(color: Color(0xFF4C5359))),
+                elevation: 1,
+                minWidth: double.maxFinite,
+                height: 50,
+                color: Color(0xFFE0F4FB),
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     auth
-                        .signIn(emailController.text, passwordController.text)
+                        .signIn(emailSignInController.text,
+                            passwordSignInController.text)
                         .then((value) => {
                               if (value == true)
                                 Scaffold.of(context).showSnackBar(SnackBar(
-                                    content: auth.user.displayName != null
-                                        ? Text(
-                                            'Welcome back ${auth.user.displayName} !')
-                                        : Text('Welcome !')))
+                                  content: auth.user.displayName != null
+                                      ? Text(
+                                          'Welcome back ${auth.user.displayName} !')
+                                      : Text('Welcome !'),
+                                ))
                             })
                         .catchError((e) {
                       print(e);
-                      Scaffold.of(context)
-                          .showSnackBar(SnackBar(content: Text(e.message)));
+                      Scaffold.of(context).showSnackBar(SnackBar(
+                        content: Text(e.message),
+                        backgroundColor: Colors.redAccent,
+                      ));
                     });
                   }
                 },
-                child: Text('Sign In'),
+                child: Text('Sign In',
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .headline1
+                        .copyWith(fontSize: 16)),
               ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  _buildTextField(TextEditingController controller, String labelText,
-      IconData icon, bool obscured) {
-    return TextFormField(
-        controller: controller,
-        obscureText: obscured,
-        decoration: InputDecoration(
-            // contentPadding: EdgeInsets.symmetric(horizontal: 10),
-            labelText: labelText,
-            icon: Icon(
-              icon,
-              color: Color(0xFF4C5359), //color of baleine
-            )),
-        validator: (value) {
-          if (value.isEmpty)
-            return 'This field must not be empty.';
-          else
-            return null;
-        });
   }
 }
 
@@ -212,17 +226,26 @@ class SignUpFormState extends State<SignUpForm> {
         child: Column(
           children: <Widget>[
             _buildTextField(
-                emailController, 'Email', Icons.account_circle, false),
+                emailSignUpController, 'Email', Icons.account_circle, false),
             SizedBox(height: 10),
-            _buildTextField(passwordController, 'Password', Icons.lock, true),
-            SizedBox(height: 10),
+            _buildTextField(
+                passwordSignUpController, 'Password', Icons.lock, true),
+            SizedBox(height: 20),
             Consumer<Auth>(
               builder: (BuildContext context, Auth auth, Widget child) =>
-                  RaisedButton(
+                  MaterialButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                    side: BorderSide(color: Color(0xFF4C5359))),
+                elevation: 1,
+                minWidth: double.maxFinite,
+                height: 50,
+                color: Color(0xFFE0F4FB),
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     auth
-                        .signUp(emailController.text, passwordController.text)
+                        .signUp(emailSignUpController.text,
+                            passwordSignUpController.text)
                         .then((value) => {
                               if (value == true)
                                 Scaffold.of(context).showSnackBar(SnackBar(
@@ -231,12 +254,18 @@ class SignUpFormState extends State<SignUpForm> {
                             })
                         .catchError((e) {
                       print(e);
-                      Scaffold.of(context)
-                          .showSnackBar(SnackBar(content: Text(e.message)));
+                      Scaffold.of(context).showSnackBar(SnackBar(
+                        content: Text(e.message),
+                        backgroundColor: Colors.redAccent,
+                      ));
                     });
                   }
                 },
-                child: Text('Sign Up'),
+                child: Text('Sign Up',
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .headline1
+                        .copyWith(fontSize: 16)),
               ),
             ),
           ],
@@ -244,24 +273,117 @@ class SignUpFormState extends State<SignUpForm> {
       ),
     );
   }
+}
 
-  _buildTextField(TextEditingController controller, String labelText,
-      IconData icon, bool obscured) {
-    return TextFormField(
-        controller: controller,
-        obscureText: obscured,
-        decoration: InputDecoration(
-            // contentPadding: EdgeInsets.symmetric(horizontal: 10),
-            labelText: labelText,
-            icon: Icon(
-              icon,
-              color: Color(0xFF4C5359), //color of baleine
-            )),
-        validator: (value) {
-          if (value.isEmpty)
-            return 'This field must not be empty.';
-          else
-            return null;
-        });
+class SignOut extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<Auth>(
+      builder: (BuildContext context, Auth auth, Widget child) => RaisedButton(
+        onPressed: () {
+          auth
+              .signOut()
+              .then((value) => {
+                    if (value == null)
+                      Scaffold.of(context).showSnackBar(SnackBar(
+                        content: Text('Deconnected, bye !'),
+                        backgroundColor: Color(0xFF4C5359),
+                      ))
+                  })
+              .catchError((e) {
+            print(e);
+            Scaffold.of(context).showSnackBar(SnackBar(
+              content: Text(e.message),
+              backgroundColor: Colors.redAccent,
+            ));
+          });
+        },
+        child: Text('Logout'),
+      ),
+    );
+  }
+}
+
+class ForgotScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Forgot password'),
+        backgroundColor: Color(0xFFE0F4FB),
+      ),
+      body: SafeArea(
+        child: Container(
+          child: Column(
+            children: [
+              ForgotForm(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ForgotForm extends StatefulWidget {
+  @override
+  ForgotFormState createState() {
+    return ForgotFormState();
+  }
+}
+
+class ForgotFormState extends State<ForgotForm> {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 30),
+        child: Column(
+          children: <Widget>[
+            _buildTextField(
+                emailForgotController, 'Email', Icons.account_circle, false),
+            SizedBox(height: 10),
+            Consumer<Auth>(
+              builder: (BuildContext context, Auth auth, Widget child) =>
+                  MaterialButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                    side: BorderSide(color: Color(0xFF4C5359))),
+                elevation: 1,
+                minWidth: double.maxFinite,
+                height: 50,
+                color: Color(0xFFE0F4FB),
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    auth
+                        .forgot(emailForgotController.text)
+                        .then((value) => {
+                              if (value == null)
+                                Scaffold.of(context).showSnackBar(
+                                    SnackBar(content: Text('Email send !')))
+                            })
+                        .catchError((e) {
+                      print(e);
+                      Scaffold.of(context).showSnackBar(SnackBar(
+                        content: Text(e.message),
+                        backgroundColor: Colors.redAccent,
+                      ));
+                    });
+                  }
+                },
+                child: Text('Send',
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .headline1
+                        .copyWith(fontSize: 16)),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -32,11 +32,12 @@ class Auth extends ChangeNotifier {
       print(_auth.currentUser);
       return true;
     });
-    // .catchError((e) {
-    //   print('Firebase: Failed with error code: ${e.code}');
-    //   // print(e.message);
-    //   return false;
-    // });
+  }
+
+  Future<dynamic> forgot(String email) async {
+    return await _auth
+        .sendPasswordResetEmail(email: email)
+        .then((value) => notifyListeners());
   }
 
   Future signOut() async {

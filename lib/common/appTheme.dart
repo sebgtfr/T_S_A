@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 final ThemeData appTheme = ThemeData(
-  primarySwatch: Colors.lightBlue,
+  primarySwatch: Colors.blue,
   backgroundColor: Colors.white,
   visualDensity: VisualDensity.adaptivePlatformDensity,
   fontFamily: 'proxima',
