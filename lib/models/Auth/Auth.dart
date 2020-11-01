@@ -1,46 +1,29 @@
 import 'package:flutter/foundation.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class Auth extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  User get user {
-    return _auth.currentUser;
+  Stream<User> get user {
+    return _auth.authStateChanges().map((user) => user);
   }
 
-  Future<dynamic> signIn(String email, String password) async {
-    return await _auth
-        .signInWithEmailAndPassword(email: email, password: password)
-        .then((UserCredential user) {
-      notifyListeners();
-      print(_auth.currentUser);
-      return true;
-    });
-    // .catchError((e) {
-    //   print('Firebase: Failed with error code: ${e.code}');
-    //   // print(e.message);
-    //   return false;
-    // });
+  Future<UserCredential> signIn(String email, String password) {
+    return _auth.signInWithEmailAndPassword(email: email, password: password);
   }
 
-  Future<dynamic> signUp(String email, String password) async {
-    return await _auth
-        .createUserWithEmailAndPassword(email: email, password: password)
-        .then((UserCredential user) {
-      notifyListeners();
-      print(_auth.currentUser);
-      return true;
-    });
+  Future<UserCredential> signUp(String email, String password) {
+    return _auth.createUserWithEmailAndPassword(
+        email: email, password: password);
   }
 
-  Future<dynamic> forgot(String email) async {
-    return await _auth
-        .sendPasswordResetEmail(email: email)
-        .then((value) => notifyListeners());
+  Future<void> forgot(String email) {
+    return _auth.sendPasswordResetEmail(email: email);
   }
 
-  Future signOut() async {
-    return await _auth.signOut().then((value) => notifyListeners());
+  Future signOut(BuildContext context) {
+    return _auth.signOut();
   }
 }
