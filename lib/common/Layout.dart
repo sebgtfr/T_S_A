@@ -37,9 +37,10 @@ class _Layout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        appBar: appBar,
-        floatingActionButton: floatingActionButton,
-        body: SafeArea(child: child));
+      backgroundColor: Theme.of(context).backgroundColor,
+      appBar: appBar,
+      floatingActionButton: floatingActionButton,
+      body: SafeArea(child: child),
+    );
   }
 }
