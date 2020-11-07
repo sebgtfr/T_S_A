@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:tsa_gram/screen/Connected/AddScreen.dart';
-import 'package:tsa_gram/screen/Connected/FavoriteScreen.dart';
 import 'package:tsa_gram/screen/Connected/HomeScreen.dart';
 import 'package:tsa_gram/screen/Connected/ProfileScreen.dart';
-import 'package:tsa_gram/screen/Connected/SearchScreen.dart';
 import 'package:tsa_gram/screen/PostImageScreen.dart';
 
 class BaseScreen extends StatefulWidget {
