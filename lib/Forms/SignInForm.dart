@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tsa_gram/models/Auth/Auth.dart';
 import 'package:tsa_gram/screen/ForgotScreen.dart';
+import 'package:tsa_gram/widgets/Button.dart';
 import 'package:tsa_gram/widgets/TextInput.dart';
 
 class SignInForm extends StatefulWidget {
@@ -11,7 +12,7 @@ class SignInForm extends StatefulWidget {
 }
 
 class SignInFormState extends State<SignInForm> {
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Auth _auth = Auth();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -56,31 +57,11 @@ class SignInFormState extends State<SignInForm> {
               ),
             ),
             SizedBox(height: 20),
-            MaterialButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                  side: BorderSide(color: Color(0xFF4C5359))),
-              elevation: 1,
-              minWidth: double.maxFinite,
-              height: 50,
-              color: Color(0xFFE0F4FB),
-              onPressed: () {
-                if (_formKey.currentState.validate()) {
-                  _auth
-                      .signIn(_emailController.text, _passwordController.text)
-                      .catchError((e) {
-                    Scaffold.of(context).showSnackBar(SnackBar(
-                      content: Text(e.message),
-                      backgroundColor: Colors.redAccent,
-                    ));
-                  });
-                }
-              },
-              child: Text('Sign In',
-                  style: Theme.of(context)
-                      .primaryTextTheme
-                      .headline1
-                      .copyWith(fontSize: 16)),
+            Button(
+              label: 'Sign In',
+              onSubmit: () => _auth.signIn(
+                  _emailController.text.trim(), _passwordController.text),
+              onValidate: () => _formKey.currentState.validate(),
             ),
           ],
         ),

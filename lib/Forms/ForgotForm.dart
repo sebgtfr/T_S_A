@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tsa_gram/models/Auth/Auth.dart';
 import 'package:tsa_gram/widgets/TextInput.dart';
+import 'package:tsa_gram/widgets/Button.dart';
 
 class ForgotForm extends StatefulWidget {
   @override
@@ -10,7 +11,7 @@ class ForgotForm extends StatefulWidget {
 }
 
 class ForgotFormState extends State<ForgotForm> {
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Auth _auth = Auth();
   final TextEditingController _emailController = TextEditingController();
 
@@ -29,36 +30,15 @@ class ForgotFormState extends State<ForgotForm> {
               obscured: false,
             ),
             SizedBox(height: 10),
-            MaterialButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                  side: BorderSide(color: Color(0xFF4C5359))),
-              elevation: 1,
-              minWidth: double.maxFinite,
-              height: 50,
-              color: Color(0xFFE0F4FB),
-              onPressed: () {
-                if (_formKey.currentState.validate()) {
-                  _auth
-                      .forgot(_emailController.text)
-                      .then((void dummy) => {
-                            Scaffold.of(context).showSnackBar(
-                                SnackBar(content: Text('Email send !')))
-                          })
-                      .catchError((e) {
-                    print(e);
-                    Scaffold.of(context).showSnackBar(SnackBar(
-                      content: Text(e.message),
-                      backgroundColor: Colors.redAccent,
-                    ));
-                  });
-                }
-              },
-              child: Text('Send',
-                  style: Theme.of(context)
-                      .primaryTextTheme
-                      .headline1
-                      .copyWith(fontSize: 16)),
+            Button(
+              onSubmit: () => _auth
+                  .forgot(_emailController.text)
+                  .then((void dummy) => Scaffold.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Email send !'),
+                        ),
+                      )),
+              onValidate: () => _formKey.currentState.validate(),
             ),
           ],
         ),

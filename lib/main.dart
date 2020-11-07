@@ -6,8 +6,6 @@ import 'package:provider/provider.dart';
 
 import 'package:tsa_gram/common/appTheme.dart';
 import 'package:tsa_gram/models/Auth/Auth.dart';
-import 'package:tsa_gram/screen/AuthScreen.dart';
-import 'package:tsa_gram/screen/HomeScreen.dart';
 
 import 'package:tsa_gram/widgets/AppRouter.dart';
 

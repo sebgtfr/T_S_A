@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 class TextInput extends StatelessWidget {
-  TextInput(
-      {@required TextEditingController this.controller,
-      @required String this.labelText,
-      @required IconData this.icon,
-      @required bool this.obscured});
+  TextInput({
+    @required this.controller,
+    @required this.labelText,
+    @required this.obscured,
+    @optionalTypeArgs this.icon,
+  });
 
   final TextEditingController controller;
   final String labelText;
@@ -19,10 +20,12 @@ class TextInput extends StatelessWidget {
       obscureText: obscured,
       decoration: InputDecoration(
         labelText: labelText,
-        icon: Icon(
-          icon,
-          color: Color(0xFF4C5359), //color of baleine
-        ),
+        icon: (icon != null)
+            ? Icon(
+                icon,
+                color: Color(0xFF4C5359), //color of baleine
+              )
+            : null,
       ),
       validator: (value) {
         if (value.isEmpty)

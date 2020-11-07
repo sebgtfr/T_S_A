@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class ProfileScreen extends StatelessWidget {
+class FavoriteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Text('Profile screen');
+    return Text('Favorite');
   }
 }
