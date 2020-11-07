@@ -17,9 +17,6 @@ class _BaseScreenState extends State<BaseScreen> {
 
   final List<Widget> _screens = [
     HomeScreen(),
-    SearchScreen(),
-    AddScreen(),
-    FavoriteScreen(),
     ProfileScreen(),
   ];
 
@@ -62,18 +59,6 @@ class _BaseScreenState extends State<BaseScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            label: 'Add',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favorite',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.perm_identity),

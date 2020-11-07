@@ -14,6 +14,7 @@ class SignUpFormState extends State<SignUpForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Auth _auth = Auth();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _displayNameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
@@ -25,9 +26,16 @@ class SignUpFormState extends State<SignUpForm> {
         child: Column(
           children: <Widget>[
             TextInput(
+              controller: _displayNameController,
+              labelText: 'Display name',
+              icon: Icons.account_circle,
+              obscured: false,
+            ),
+            SizedBox(height: 10),
+            TextInput(
               controller: _emailController,
               labelText: 'Email',
-              icon: Icons.account_circle,
+              icon: Icons.alternate_email,
               obscured: false,
             ),
             SizedBox(height: 10),
@@ -41,7 +49,9 @@ class SignUpFormState extends State<SignUpForm> {
             Button(
               label: 'Sign In',
               onSubmit: () => _auth.signUp(
-                  _emailController.text.trim(), _passwordController.text),
+                  _emailController.text.trim(),
+                  _passwordController.text.trim(),
+                  _displayNameController.text.trim()),
               onValidate: () => _formKey.currentState.validate(),
             ),
           ],

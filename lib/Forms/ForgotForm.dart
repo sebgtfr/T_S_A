@@ -26,7 +26,7 @@ class ForgotFormState extends State<ForgotForm> {
             TextInput(
               controller: _emailController,
               labelText: 'Email',
-              icon: Icons.account_circle,
+              icon: Icons.alternate_email,
               obscured: false,
             ),
             SizedBox(height: 10),

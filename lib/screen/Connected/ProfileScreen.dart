@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:tsa_gram/models/Auth/Auth.dart';
+import 'package:tsa_gram/widgets/Button.dart';
 
 class ProfileScreen extends StatelessWidget {
   final Auth _auth = Auth();
@@ -28,22 +30,12 @@ class ProfileScreen extends StatelessWidget {
         (user.displayName != null)
             ? Text('Display Name: ' + user.displayName)
             : Container(),
-        MaterialButton(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18.0),
-              side: BorderSide(color: Color(0xFF4C5359))),
-          elevation: 1,
-          minWidth: double.maxFinite,
-          height: 50,
-          color: Color(0xFFE0F4FB),
-          onPressed: () {
+        Button(
+          label: 'Logout',
+          onSubmit: () {
             _auth.signOut(context);
+            return null;
           },
-          child: Text('Logout',
-              style: Theme.of(context)
-                  .primaryTextTheme
-                  .headline1
-                  .copyWith(fontSize: 16)),
         ),
       ],
     );
