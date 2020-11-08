@@ -16,7 +16,7 @@ class PostModel {
       : photoUrl = json['photoUrl'],
         caption = json['caption'],
         location = json['location'],
-        likes = new List<String>.from(json['likes']),
+        likes = new List<String>.from(json['likes'] ?? []),
         createAt = json['createAt'],
         uploadBy = user;
 }
