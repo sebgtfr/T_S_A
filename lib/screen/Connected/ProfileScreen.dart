@@ -19,7 +19,7 @@ class ProfileScreen extends StatelessWidget {
     }
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 50.0),
+      padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 50.0),
       child: Container(
         width: double.infinity,
         height: 600,
@@ -31,26 +31,28 @@ class ProfileScreen extends StatelessWidget {
           children: <Widget>[
             Row(
               children: [
-                (user.photoURL != null)
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: Image(
-                          image: NetworkImage(user.photoURL),
-                          width: 70,
-                          height: 70,
-                          fit: BoxFit.cover,
-                        ),
-                      )
-                    : Container(),
-                SizedBox(width: 20),
-                (user.displayName != null)
-                    ? Text(user.displayName,
-                        style: TextStyle(fontWeight: FontWeight.bold))
-                    : Container(),
+                if (user.photoURL != null)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: Image(
+                      image: NetworkImage(user.photoURL),
+                      width: 70,
+                      height: 70,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                else
+                  Container(),
+                const SizedBox(width: 20),
+                if (user.displayName != null)
+                  Text(user.displayName,
+                      style: const TextStyle(fontWeight: FontWeight.bold))
+                else
+                  Container(),
               ],
             ),
             ProfileForm(),
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
             Button(
               label: 'Logout',
               onSubmit: () {
