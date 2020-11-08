@@ -14,6 +14,7 @@ class _BaseScreenState extends State<BaseScreen> {
 
   final List<Widget> _screens = [
     HomeScreen(),
+    PostImageScreen(),
     ProfileScreen(),
   ];
 
@@ -28,24 +29,6 @@ class _BaseScreenState extends State<BaseScreen> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar: AppBar(
-        title: Text('TSA Gram'),
-        actions: <Widget>[
-          IconButton(
-            tooltip: 'Take a picture',
-            icon: Icon(Icons.camera),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PostImageScreen(),
-                  fullscreenDialog: true,
-                ),
-              );
-            },
-          )
-        ],
-      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         showSelectedLabels: false,
@@ -56,6 +39,10 @@ class _BaseScreenState extends State<BaseScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.camera),
+            label: 'Camera',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.perm_identity),

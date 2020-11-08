@@ -117,9 +117,6 @@ class _PostFormState extends State<PostForm> {
                             PostModel(pathFile, this._captionController.text,
                                 location),
                             user.uid);
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => BaseScreen(),
-                        ));
                       });
                       return null;
                     },

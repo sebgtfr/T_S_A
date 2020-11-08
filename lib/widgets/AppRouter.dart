@@ -8,12 +8,10 @@ import 'package:tsa_gram/screen/AuthScreen.dart';
 class AppRouter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final User user = Provider.of<User>(context);
-
-    if (user == null) {
-      return AuthScreen();
-    }
-
-    return BaseScreen();
+    return Consumer<User>(
+      builder:
+          (final BuildContext context, final User user, final Widget child) =>
+              user == null ? AuthScreen() : BaseScreen(),
+    );
   }
 }

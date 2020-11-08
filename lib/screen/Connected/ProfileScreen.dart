@@ -13,6 +13,10 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final User user = Provider.of<User>(context);
 
+    if (user == null) {
+      return Container();
+    }
+
     return Column(
       children: <Widget>[
         (user.photoURL != null)
