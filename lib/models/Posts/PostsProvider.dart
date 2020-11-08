@@ -27,8 +27,10 @@ class PostsProvider extends ChangeNotifier {
 
         if (userDoc.exists) {
           return PostModel.fromJson(
+            doc.id,
             postData,
             UserModel.fromJson(
+              userDoc.id,
               userDoc.data(),
             ),
           );
@@ -68,5 +70,24 @@ class PostsProvider extends ChangeNotifier {
       'uploadBy': _auth.db.doc("users/" + userUId),
       'createAt': FieldValue.serverTimestamp(),
     });
+  }
+
+  void likePost(final int index, final String userUId) {
+    final PostModel post = this._listAllPosts.posts[index];
+    final int indexLike =
+        this._listAllPosts.posts[index].likes.indexOf(userUId);
+    FieldValue field;
+
+    if (indexLike != -1) {
+      this._listAllPosts.posts[index].likes.removeAt(indexLike);
+      field = FieldValue.arrayRemove([userUId]);
+    } else {
+      this._listAllPosts.posts[index].likes.add(userUId);
+      field = FieldValue.arrayUnion([userUId]);
+    }
+    _auth.db
+        .collection(collectionName)
+        .doc(post.id)
+        .update({'likes': field}).then((void value) => notifyListeners());
   }
 }

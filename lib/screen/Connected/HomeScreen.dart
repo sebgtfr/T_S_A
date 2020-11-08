@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -33,8 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<PostsProvider>(builder:
-        (BuildContext context, PostsProvider postsProvider, Widget child) {
+    return Consumer2<User, PostsProvider>(builder: (BuildContext context,
+        User user, PostsProvider postsProvider, Widget child) {
       return (!postsProvider.listAllPosts.isUploaded)
           ? Container(
               child: LinearProgressIndicator(),
@@ -76,19 +77,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   child: CircleAvatar(
                                     child: ClipOval(
-                                        /*child: Image(
-                                    height: 50.0,
-                                    width: 50.0,
-                                    image: NetworkImage(postsProvider.listAllPosts.posts[index].photoUrl),
-                                    // ** OLD ** image: AssetImage
-                                    (posts[index].authorImageUrl),
-                                    fit: BoxFit.cover,
-                                  ),*/
-                                        ),
+                                      child: postsProvider
+                                                  .listAllPosts
+                                                  .posts[index]
+                                                  .uploadBy
+                                                  .photoUrl !=
+                                              null
+                                          ? Image(
+                                              height: 50.0,
+                                              width: 50.0,
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(postsProvider
+                                                  .listAllPosts
+                                                  .posts[index]
+                                                  .uploadBy
+                                                  .photoUrl),
+                                            )
+                                          : Container(),
+                                    ),
                                   ),
                                 ),
                                 title: Text(
-                                  // posts[index].authorName,
                                   postsProvider.listAllPosts.posts[index]
                                       .uploadBy.displayName,
                                   style: TextStyle(
@@ -97,7 +106,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 subtitle: Text(this.getTimeDiff(postsProvider
                                     .listAllPosts.posts[index].createAt)),
-                                // Text(posts[index].timeAgo)
                                 trailing: IconButton(
                                   icon: Icon(Icons.more_horiz),
                                   color: Colors.black,
@@ -105,7 +113,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               InkWell(
-                                onDoubleTap: () => print('Like post'),
+                                onDoubleTap: () =>
+                                    postsProvider.likePost(index, user.uid),
                                 onTap: () {
                                   /*Navigator.push(
                                 context,
@@ -144,7 +153,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       IconButton(
                                         icon: Icon(Icons.favorite_border),
                                         iconSize: 30.0,
-                                        onPressed: () => print('Like post'),
+                                        onPressed: () => postsProvider.likePost(
+                                            index, user.uid),
                                       ),
                                       Text(
                                         postsProvider.listAllPosts.posts[index]
