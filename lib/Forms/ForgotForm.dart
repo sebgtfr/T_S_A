@@ -20,7 +20,7 @@ class ForgotFormState extends State<ForgotForm> {
     return Form(
       key: _formKey,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 30),
+        margin: const EdgeInsets.symmetric(horizontal: 30),
         child: Column(
           children: <Widget>[
             TextInput(
@@ -29,15 +29,16 @@ class ForgotFormState extends State<ForgotForm> {
               icon: Icons.alternate_email,
               obscured: false,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Button(
-              onSubmit: () => _auth
-                  .forgot(_emailController.text)
-                  .then((void dummy) => Scaffold.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Email send !'),
-                        ),
-                      )),
+              onSubmit: () =>
+                  _auth.forgot(_emailController.text).then<void>((void dummy) {
+                Scaffold.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Email send !'),
+                  ),
+                );
+              }),
               onValidate: () => _formKey.currentState.validate(),
             ),
           ],

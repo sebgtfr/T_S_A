@@ -8,11 +8,11 @@ import 'package:tsa_gram/models/Posts/PostsList.dart';
 import 'package:tsa_gram/models/UserModel.dart';
 
 class PostsProvider extends ChangeNotifier {
-  static const String collectionName = "posts";
+  static const String collectionName = 'posts';
 
   final Auth _auth = Auth();
 
-  PostsList _listAllPosts = PostsList();
+  final PostsList _listAllPosts = PostsList();
 
   PostsList get listAllPosts {
     return _listAllPosts;
@@ -22,13 +22,21 @@ class PostsProvider extends ChangeNotifier {
     return Future.wait(postQuery.docs.map((QueryDocumentSnapshot doc) async {
       if (doc.exists) {
         final Map<String, dynamic> postData = doc.data();
-        final DocumentReference userRef = postData['uploadBy'];
+        final DocumentReference userRef =
+            postData['uploadBy'] as DocumentReference;
         final DocumentSnapshot userDoc = await userRef.get();
 
         if (userDoc.exists) {
+          final List<String> likes = <String>[];
+
+          postData['likes'].forEach((final dynamic item) {
+            likes.add(item as String);
+          });
+
           return PostModel.fromJson(
             doc.id,
             postData,
+            likes,
             UserModel.fromJson(
               userDoc.id,
               userDoc.data(),
@@ -44,7 +52,7 @@ class PostsProvider extends ChangeNotifier {
     _listAllPosts.isUploaded = false;
     _listAllPosts.posts.clear();
     notifyListeners();
-    this.fetchAllPosts();
+    fetchAllPosts();
   }
 
   void fetchAllPosts() {
@@ -62,32 +70,32 @@ class PostsProvider extends ChangeNotifier {
 
   Future<DocumentReference> addPost(
       final PostModel post, final String userUId) {
-    return _auth.db.collection(collectionName).add({
+    return _auth.db.collection(collectionName).add(<String, dynamic>{
       'photoUrl': post.photoUrl,
       'caption': post.caption,
       'location': post.location,
-      'likes': List<String>(),
-      'uploadBy': _auth.db.doc("users/" + userUId),
+      'likes': <String>[],
+      'uploadBy': _auth.db.doc('users/$userUId'),
       'createAt': FieldValue.serverTimestamp(),
     });
   }
 
   void likePost(final int index, final String userUId) {
-    final PostModel post = this._listAllPosts.posts[index];
-    final int indexLike =
-        this._listAllPosts.posts[index].likes.indexOf(userUId);
+    final PostModel post = _listAllPosts.posts[index];
+    final int indexLike = _listAllPosts.posts[index].likes.indexOf(userUId);
     FieldValue field;
 
     if (indexLike != -1) {
-      this._listAllPosts.posts[index].likes.removeAt(indexLike);
-      field = FieldValue.arrayRemove([userUId]);
+      _listAllPosts.posts[index].likes.removeAt(indexLike);
+      field = FieldValue.arrayRemove(<String>[userUId]);
     } else {
-      this._listAllPosts.posts[index].likes.add(userUId);
-      field = FieldValue.arrayUnion([userUId]);
+      _listAllPosts.posts[index].likes.add(userUId);
+      field = FieldValue.arrayUnion(<String>[userUId]);
     }
     _auth.db
         .collection(collectionName)
         .doc(post.id)
-        .update({'likes': field}).then((void value) => notifyListeners());
+        .update(<String, dynamic>{'likes': field}).then(
+            (void value) => notifyListeners());
   }
 }

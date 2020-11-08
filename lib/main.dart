@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 
 import 'package:tsa_gram/common/appTheme.dart';
 import 'package:tsa_gram/models/Auth/Auth.dart';
@@ -12,12 +13,13 @@ import 'package:tsa_gram/models/Uploader.dart';
 
 import 'package:tsa_gram/widgets/AppRouter.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+  Firebase.initializeApp()
+      .then((FirebaseApp app) => SystemChrome.setPreferredOrientations(
+          <DeviceOrientation>[DeviceOrientation.portraitUp]))
       .then((_) {
-    runApp(new MyApp());
+    runApp(MyApp());
   });
 }
 
@@ -26,12 +28,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
+      providers: <SingleChildWidget>[
         StreamProvider<User>.value(value: Auth().user),
-        ChangeNotifierProvider(
+        ChangeNotifierProvider<PostsProvider>(
           create: (BuildContext context) => PostsProvider(),
         ),
-        ChangeNotifierProvider(
+        ChangeNotifierProvider<Uploader>(
           create: (BuildContext context) => Uploader(),
         ),
       ],

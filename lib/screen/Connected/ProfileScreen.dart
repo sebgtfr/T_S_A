@@ -19,21 +19,23 @@ class ProfileScreen extends StatelessWidget {
 
     return Column(
       children: <Widget>[
-        (user.photoURL != null)
-            ? ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: Image(
-                  image: NetworkImage(user.photoURL),
-                  width: 170,
-                  height: 170,
-                  fit: BoxFit.cover,
-                ),
-              )
-            : Container(),
+        if (user.photoURL != null)
+          ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: Image(
+              image: NetworkImage(user.photoURL),
+              width: 170,
+              height: 170,
+              fit: BoxFit.cover,
+            ),
+          )
+        else
+          Container(),
         Text('Email: ' + user.email),
-        (user.displayName != null)
-            ? Text('Display Name: ' + user.displayName)
-            : Container(),
+        if (user.displayName != null)
+          Text('Display Name: ' + user.displayName)
+        else
+          Container(),
         Button(
           label: 'Logout',
           onSubmit: () {

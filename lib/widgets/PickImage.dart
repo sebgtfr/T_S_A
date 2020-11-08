@@ -29,22 +29,22 @@ class PickImage extends StatelessWidget {
 
         ImageCropper.cropImage(
                 sourcePath: pickedFile.path,
-                aspectRatioPresets: [
+                aspectRatioPresets: <CropAspectRatioPreset>[
                   CropAspectRatioPreset.original,
                 ],
-                androidUiSettings: AndroidUiSettings(
+                androidUiSettings: const AndroidUiSettings(
                   toolbarTitle: 'Cropper',
                   initAspectRatio: CropAspectRatioPreset.original,
                   lockAspectRatio: true,
                 ),
-                iosUiSettings: IOSUiSettings(
+                iosUiSettings: const IOSUiSettings(
                   title: 'Cropper',
                   aspectRatioLockEnabled: true,
                 ),
                 compressQuality: 40)
             .then((File croppedFile) {
           if (croppedFile != null) {
-            this.onPicked(File(croppedFile.path), filename);
+            onPicked(File(croppedFile.path), filename);
           }
         });
       }
@@ -53,6 +53,6 @@ class PickImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return this.builder(context, this.pickImage);
+    return builder(context, pickImage);
   }
 }

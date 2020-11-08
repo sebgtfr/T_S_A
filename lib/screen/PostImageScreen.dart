@@ -23,7 +23,7 @@ class _PostImageScreenState extends State<PostImageScreen> {
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text('Select Image'),
+        title: const Text('Select Image'),
         actions: <Widget>[
           PickImage(
             onPicked: (File image, String filename) {
@@ -36,7 +36,7 @@ class _PostImageScreenState extends State<PostImageScreen> {
                 (BuildContext context, void Function(ImageSource) pickImage) =>
                     IconButton(
               tooltip: 'Take from camera',
-              icon: Icon(Icons.add_a_photo),
+              icon: const Icon(Icons.add_a_photo),
               onPressed: () => pickImage(ImageSource.camera),
             ),
           ),
@@ -51,7 +51,7 @@ class _PostImageScreenState extends State<PostImageScreen> {
                 (BuildContext context, void Function(ImageSource) pickImage) =>
                     IconButton(
               tooltip: 'Select from photo',
-              icon: Icon(Icons.add_photo_alternate),
+              icon: const Icon(Icons.add_photo_alternate),
               onPressed: () => pickImage(ImageSource.gallery),
             ),
           ),
@@ -59,24 +59,24 @@ class _PostImageScreenState extends State<PostImageScreen> {
       ),
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.all(10),
-          child: this._image != null
+          padding: const EdgeInsets.all(10),
+          child: _image != null
               ? Padding(
                   padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: Column(
-                    children: [
+                    children: <Widget>[
                       Expanded(
                         child: Center(
                           child: Image.file(
-                            this._image,
+                            _image,
                           ),
                         ),
                       ),
                       Expanded(
                         child: PostForm(
-                          image: this._image,
-                          imageFilename: this._imageFilename,
+                          image: _image,
+                          imageFilename: _imageFilename,
                         ),
                       ),
                     ],

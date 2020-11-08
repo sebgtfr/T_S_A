@@ -31,18 +31,18 @@ class _AuthScreenState extends State<AuthScreen> {
             children: <Widget>[
               Flexible(
                 child: Row(
-                  children: [
+                  children: <Widget>[
                     Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           color: Color(0xFFE0F4FB),
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(90))),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image(
+                        children: <Widget>[
+                          const Image(
                             image: AssetImage('assets/img/logo.jpg'),
                             width: 250,
                           ),
@@ -55,22 +55,22 @@ class _AuthScreenState extends State<AuthScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 10),
-              chooseForm ? SignInForm() : SignUpForm(),
-              SizedBox(height: 20),
+              const SizedBox(height: 10),
+              if (chooseForm) SignInForm() else SignUpForm(),
+              const SizedBox(height: 20),
               GestureDetector(
                 onTap: () {
                   changeForm();
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: <Widget>[
                     Text(chooseForm
                         ? "Don't have an Account ? "
-                        : "Already have an "
-                            "Account ? "),
+                        : 'Already have an '
+                            'Account ? '),
                     Text(
-                      chooseForm ? "Sign Up" : "Sign In",
+                      chooseForm ? 'Sign Up' : 'Sign In',
                       style: Theme.of(context)
                           .primaryTextTheme
                           .headline1
@@ -79,7 +79,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
             ],
           ),
         ),
