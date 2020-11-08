@@ -18,20 +18,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   String getTimeDiff(final Timestamp postCreatedAtTime) {
-    final DateTime postCreatedAt = new DateTime.fromMillisecondsSinceEpoch(
+    final DateTime postCreatedAt = DateTime.fromMillisecondsSinceEpoch(
         postCreatedAtTime.millisecondsSinceEpoch);
     final Duration diff = DateTime.now().difference(postCreatedAt);
 
     if (diff.inSeconds < 0) {
-      return "0 sec";
+      return '0 sec';
     } else if (diff.inSeconds < 60) {
-      return "${diff.inSeconds.toString()} sec";
+      return '${diff.inSeconds.toString()} sec';
     } else if (diff.inMinutes < 60) {
-      return "${diff.inMinutes.toString()} min";
+      return '${diff.inMinutes.toString()} min';
     } else if (diff.inHours < 24) {
-      return "${diff.inHours.toString()} hours";
+      return '${diff.inHours.toString()} hours';
     }
-    return "${diff.inDays.toString()} days";
+    return '${diff.inDays.toString()} days';
   }
 
   @override
@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
         User user, PostsProvider postsProvider, Widget child) {
       return (!postsProvider.listAllPosts.isUploaded)
           ? Container(
-              child: LinearProgressIndicator(),
+              child: const LinearProgressIndicator(),
             )
           : Container(
               child: RefreshIndicator(
@@ -50,8 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ListView.builder(
                   itemCount: postsProvider.listAllPosts.posts.length,
                   itemBuilder: (BuildContext context, int index) => Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 5.0),
                     child: Container(
                       width: double.infinity,
                       height: 600,
@@ -67,9 +67,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 leading: Container(
                                   width: 50.0,
                                   height: 50.0,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
-                                    boxShadow: [
+                                    boxShadow: <BoxShadow>[
                                       BoxShadow(
                                         color: Colors.black45,
                                         offset: Offset(0, 2),
@@ -102,14 +102,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 title: Text(
                                   postsProvider.listAllPosts.posts[index]
                                       .uploadBy.displayName,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                subtitle: Text(this.getTimeDiff(postsProvider
+                                subtitle: Text(getTimeDiff(postsProvider
                                     .listAllPosts.posts[index].createAt)),
                                 trailing: IconButton(
-                                  icon: Icon(Icons.more_horiz),
+                                  icon: const Icon(Icons.more_horiz),
                                   color: Colors.black,
                                   onPressed: () => print('More'),
                                 ),
@@ -128,13 +128,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               );*/
                                 },
                                 child: Container(
-                                  margin: EdgeInsets.all(10.0),
+                                  margin: const EdgeInsets.all(10.0),
                                   width: double.infinity,
                                   height: 400.0,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(25.0),
-                                    boxShadow: [
-                                      BoxShadow(
+                                    boxShadow: <BoxShadow>[
+                                      const BoxShadow(
                                         color: Colors.black54,
                                         offset: Offset(0, 5),
                                         blurRadius: 8.0,
@@ -154,9 +154,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     children: <Widget>[
                                       Expanded(
                                         child: Row(
-                                          children: [
+                                          children: <Widget>[
                                             IconButton(
-                                              icon: Icon(Icons.favorite_border),
+                                              icon: const Icon(
+                                                  Icons.favorite_border),
                                               iconSize: 30.0,
                                               onPressed: () => postsProvider
                                                   .likePost(index, user.uid),
@@ -165,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               postsProvider.listAllPosts
                                                   .posts[index].likes.length
                                                   .toString(),
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontSize: 14.0,
                                                 fontWeight: FontWeight.w600,
                                               ),
@@ -178,13 +179,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     .posts[index].location !=
                                                 null
                                             ? Row(
-                                                children: [
-                                                  Icon(Icons
+                                                children: <Widget>[
+                                                  const Icon(Icons
                                                       .location_on_outlined),
                                                   Text(
                                                     postsProvider.listAllPosts
                                                         .posts[index].location,
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                       fontSize: 14.0,
                                                       fontWeight:
                                                           FontWeight.w600,
@@ -202,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         child: Text(
                                           postsProvider.listAllPosts
                                               .posts[index].caption,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 14.0,
                                             fontWeight: FontWeight.normal,
                                           ),

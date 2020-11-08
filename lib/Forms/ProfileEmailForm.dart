@@ -19,7 +19,7 @@ class _ProfileFormState extends State<ProfileForm> {
 
   @override
   void initState() {
-    User user = Provider.of<User>(context, listen: false);
+    final User user = Provider.of<User>(context, listen: false);
 
     _emailController.text = user.email;
     super.initState();
@@ -33,13 +33,13 @@ class _ProfileFormState extends State<ProfileForm> {
               Form(
         key: _formKey,
         child: Column(
-          children: [
+          children: <Widget>[
             TextInput(
               controller: _emailController,
               labelText: 'Email',
               obscured: false,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Button(
               label: 'Update Email',
               onValidate: () => _formKey.currentState.validate(),

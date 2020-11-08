@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TextInput extends StatelessWidget {
-  TextInput({
+  const TextInput({
     @required this.controller,
     @required this.labelText,
     @required this.obscured,
@@ -20,17 +20,17 @@ class TextInput extends StatelessWidget {
     return TextFormField(
       controller: controller,
       obscureText: obscured,
-      maxLength: this.maxLength,
+      maxLength: maxLength,
       decoration: InputDecoration(
         labelText: labelText,
         icon: (icon != null)
             ? Icon(
                 icon,
-                color: Color(0xFF4C5359), //color of baleine
+                color: const Color(0xFF4C5359), //color of baleine
               )
             : null,
       ),
-      validator: (value) {
+      validator: (final String value) {
         if (value.isEmpty)
           return 'This field must not be empty.';
         else

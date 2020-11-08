@@ -37,12 +37,12 @@ class Auth extends ChangeNotifier {
     return _auth
         .createUserWithEmailAndPassword(email: email, password: password)
         .then((UserCredential userCredential) =>
-            this.createUser(userCredential.user, displayName, null));
+            createUser(userCredential.user, displayName, null));
   }
 
   Future<void> createUser(
       final User userData, final String displayName, final String photoUrl) {
-    return _db.collection('users').doc(userData.uid).set({
+    return _db.collection('users').doc(userData.uid).set(<String, dynamic>{
       'email': userData.email,
       'displayName': displayName,
       'photoUrl': photoUrl,
@@ -51,7 +51,7 @@ class Auth extends ChangeNotifier {
 
   Future<void> updateUser(
       final User userData, final String displayName, final String photoUrl) {
-    return _db.collection('users').doc(userData.uid).update({
+    return _db.collection('users').doc(userData.uid).update(<String, dynamic>{
       'displayName': displayName,
       'photoUrl': photoUrl,
     }).then(
@@ -63,7 +63,7 @@ class Auth extends ChangeNotifier {
   }
 
   Future<void> updateUserEmail(final User userData, final String email) {
-    return _db.collection('users').doc(userData.uid).update({
+    return _db.collection('users').doc(userData.uid).update(<String, dynamic>{
       'email': email,
     }).then(
       (void dummy) => userData.updateEmail(email),
@@ -81,7 +81,7 @@ class Auth extends ChangeNotifier {
     return _auth.sendPasswordResetEmail(email: email);
   }
 
-  Future signOut(BuildContext context) {
+  Future<void> signOut(BuildContext context) {
     return _auth.signOut();
   }
 }

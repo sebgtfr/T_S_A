@@ -12,7 +12,7 @@ class BaseScreen extends StatefulWidget {
 class _BaseScreenState extends State<BaseScreen> {
   int _currentScreen = 0;
 
-  final List<Widget> _screens = [
+  final List<Widget> _screens = <Widget>[
     HomeScreen(),
     PostImageScreen(),
     ProfileScreen(),
@@ -36,15 +36,15 @@ class _BaseScreenState extends State<BaseScreen> {
         currentIndex: _currentScreen,
         onTap: switchScreen,
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.camera),
             label: 'Camera',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.perm_identity),
             label: 'Profile',
           ),

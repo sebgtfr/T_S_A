@@ -12,11 +12,11 @@ class Uploader extends ChangeNotifier {
   double _progress = 0.0;
 
   bool get isUploading {
-    return this._isUploading;
+    return _isUploading;
   }
 
   double get progress {
-    return this._progress;
+    return _progress;
   }
 
   void upload(final File file, final String fullPath,
@@ -25,8 +25,8 @@ class Uploader extends ChangeNotifier {
       return;
     }
 
-    this._isUploading = true;
-    this._progress = 0.0;
+    _isUploading = true;
+    _progress = 0.0;
     notifyListeners();
 
     Reference storeRef = _auth.store.ref();
@@ -35,18 +35,17 @@ class Uploader extends ChangeNotifier {
       storeRef = storeRef.child(pathElement);
     });
 
-    UploadTask uploadTask = storeRef.putFile(file);
+    final UploadTask uploadTask = storeRef.putFile(file);
 
     uploadTask.snapshotEvents.listen((TaskSnapshot event) {
       if (event.state == TaskState.success) {
         event.ref.getDownloadURL().then((final String pathFile) {
-          this._isUploading = false;
+          _isUploading = false;
           onComplete(pathFile);
           notifyListeners();
         });
       } else {
-        this._progress =
-            ((event.bytesTransferred * 100) / event.totalBytes) / 100;
+        _progress = ((event.bytesTransferred * 100) / event.totalBytes) / 100;
         notifyListeners();
       }
     });

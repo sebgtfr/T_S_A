@@ -22,7 +22,7 @@ class SignInFormState extends State<SignInForm> {
     return Form(
       key: _formKey,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 30),
+        margin: const EdgeInsets.symmetric(horizontal: 30),
         child: Column(
           children: <Widget>[
             TextInput(
@@ -31,32 +31,34 @@ class SignInFormState extends State<SignInForm> {
               icon: Icons.alternate_email,
               obscured: false,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextInput(
               controller: _passwordController,
               labelText: 'Password',
               icon: Icons.lock,
               obscured: true,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Align(
               alignment: Alignment.centerRight,
               child: Container(
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ForgotScreen()));
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (BuildContext context) => ForgotScreen(),
+                      ),
+                    );
                   },
-                  child: Text(
+                  child: const Text(
                     'Forgot your password ?',
                     textAlign: TextAlign.right,
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Button(
               label: 'Sign In',
               onSubmit: () => _auth.signIn(
