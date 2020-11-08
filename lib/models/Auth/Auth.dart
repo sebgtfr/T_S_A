@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tsa_gram/models/UserModel.dart';
 
 class Auth extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -49,8 +48,6 @@ class Auth extends ChangeNotifier {
       'photoUrl': photoUrl,
     }).then((void dummy) => userData.updateProfile(displayName: displayName));
   }
-
-  UserModel getUserById() {}
 
   Future<void> updateUser(
       final User userData, final String displayName, final String photoUrl) {

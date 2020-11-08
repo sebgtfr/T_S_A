@@ -17,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    print(context);
     this.fetchPosts();
     super.initState();
   }
@@ -26,8 +27,6 @@ class _HomeScreenState extends State<HomeScreen> {
       _isLoading = true;
       _posts = List<PostModel>();
     });
-
-    List<PostModel> posts = List<PostModel>();
 
     return _auth.db
         .collection('posts')
@@ -96,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   child: Column(
                     children: <Widget>[
-                      Text(_posts[index].caption),
+                      Text(_posts[index].uploadBy.displayName),
                       SizedBox(
                         height: 5,
                       ),

@@ -1,12 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:tsa_gram/Forms/SignInForm.dart';
 import 'package:tsa_gram/Forms/SignUpForm.dart';
 import 'package:tsa_gram/utils.dart';
-
-// final TextEditingController emailForgotController = TextEditingController();
 
 class AuthScreen extends StatefulWidget {
   @override
