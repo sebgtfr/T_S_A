@@ -51,7 +51,7 @@ class Auth extends ChangeNotifier {
 
   Future<void> updateUser(
       final User userData, final String displayName, final String photoUrl) {
-    return _db.collection('users').doc(userData.uid).set({
+    return _db.collection('users').doc(userData.uid).update({
       'displayName': displayName,
       'photoUrl': photoUrl,
     }).then(
@@ -63,7 +63,7 @@ class Auth extends ChangeNotifier {
   }
 
   Future<void> updateUserEmail(final User userData, final String email) {
-    return _db.collection('users').doc(userData.uid).set({
+    return _db.collection('users').doc(userData.uid).update({
       'email': email,
     }).then(
       (void dummy) => userData.updateEmail(email),
