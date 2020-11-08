@@ -9,8 +9,8 @@ class Button extends StatelessWidget {
 
   final Future<dynamic> Function() onSubmit;
 
-  String label;
-  bool Function() onValidate;
+  final String label;
+  final bool Function() onValidate;
 
   @override
   Widget build(BuildContext context) {
