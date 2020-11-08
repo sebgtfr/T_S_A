@@ -35,16 +35,16 @@ class _BaseScreenState extends State<BaseScreen> {
         showUnselectedLabels: false,
         currentIndex: _currentScreen,
         onTap: switchScreen,
-        items: <BottomNavigationBarItem>[
-          const BottomNavigationBarItem(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.camera),
             label: 'Camera',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.perm_identity),
             label: 'Profile',
           ),
