@@ -1,10 +1,7 @@
-//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-//import 'package:tsa_gram/models/Auth/Auth.dart';
-import 'package:tsa_gram/models/Posts/PostModel.dart';
+
 import 'package:tsa_gram/models/Posts/PostsProvider.dart';
-//import 'package:tsa_gram/models/UserModel.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -54,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       vertical: 5,
                     ),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         Text(postsProvider
                             .listAllPosts.posts[index].uploadBy.displayName),
