@@ -22,7 +22,9 @@ class _HomeScreenState extends State<HomeScreen> {
         postCreatedAtTime.millisecondsSinceEpoch);
     final Duration diff = DateTime.now().difference(postCreatedAt);
 
-    if (diff.inSeconds < 60) {
+    if (diff.inSeconds < 0) {
+      return "0 sec";
+    } else if (diff.inSeconds < 60) {
       return "${diff.inSeconds.toString()} sec";
     } else if (diff.inMinutes < 60) {
       return "${diff.inMinutes.toString()} min";
@@ -150,20 +152,47 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: <Widget>[
                                   Row(
                                     children: <Widget>[
-                                      IconButton(
-                                        icon: Icon(Icons.favorite_border),
-                                        iconSize: 30.0,
-                                        onPressed: () => postsProvider.likePost(
-                                            index, user.uid),
-                                      ),
-                                      Text(
-                                        postsProvider.listAllPosts.posts[index]
-                                            .likes.length
-                                            .toString(),
-                                        style: TextStyle(
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w600,
+                                      Expanded(
+                                        child: Row(
+                                          children: [
+                                            IconButton(
+                                              icon: Icon(Icons.favorite_border),
+                                              iconSize: 30.0,
+                                              onPressed: () => postsProvider
+                                                  .likePost(index, user.uid),
+                                            ),
+                                            Text(
+                                              postsProvider.listAllPosts
+                                                  .posts[index].likes.length
+                                                  .toString(),
+                                              style: TextStyle(
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
                                         ),
+                                      ),
+                                      Expanded(
+                                        child: postsProvider.listAllPosts
+                                                    .posts[index].location !=
+                                                null
+                                            ? Row(
+                                                children: [
+                                                  Icon(Icons
+                                                      .location_on_outlined),
+                                                  Text(
+                                                    postsProvider.listAllPosts
+                                                        .posts[index].location,
+                                                    style: TextStyle(
+                                                      fontSize: 14.0,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            : Container(),
                                       ),
                                     ],
                                   ),
