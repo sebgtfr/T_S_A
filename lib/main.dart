@@ -6,6 +6,9 @@ import 'package:provider/provider.dart';
 
 import 'package:tsa_gram/common/appTheme.dart';
 import 'package:tsa_gram/models/Auth/Auth.dart';
+//import 'package:tsa_gram/models/Posts/PostsList.dart';
+import 'package:tsa_gram/models/Posts/PostsProvider.dart';
+import 'package:tsa_gram/models/Uploader.dart';
 
 import 'package:tsa_gram/widgets/AppRouter.dart';
 
@@ -22,8 +25,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<User>.value(
-      value: Auth().user,
+    return MultiProvider(
+      providers: [
+        StreamProvider<User>.value(value: Auth().user),
+        ChangeNotifierProvider(
+          create: (BuildContext context) => PostsProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (BuildContext context) => Uploader(),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'TSA_Gram',

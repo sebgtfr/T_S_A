@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tsa_gram/models/Auth/Auth.dart';
-import 'package:tsa_gram/models/PostModel.dart';
-import 'package:tsa_gram/models/UserModel.dart';
+import 'package:provider/provider.dart';
+
+import 'package:tsa_gram/models/Posts/PostsProvider.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -10,125 +11,216 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final Auth _auth = Auth();
-
-  bool _isLoading = true;
-  List<PostModel> _posts = [];
-
   @override
   void initState() {
-    print(context);
-    this.fetchPosts();
+    Provider.of<PostsProvider>(context, listen: false).fetchAllPosts();
     super.initState();
   }
 
-  Future<void> fetchPosts() {
-    setState(() {
-      _isLoading = true;
-      _posts = List<PostModel>();
-    });
+  String getTimeDiff(final Timestamp postCreatedAtTime) {
+    final DateTime postCreatedAt = new DateTime.fromMillisecondsSinceEpoch(
+        postCreatedAtTime.millisecondsSinceEpoch);
+    final Duration diff = DateTime.now().difference(postCreatedAt);
 
-    return _auth.db
-        .collection('posts')
-        .orderBy('createAt', descending: true)
-        .get()
-        .then((QuerySnapshot postQuery) {
-      postQuery.docs.forEach((QueryDocumentSnapshot doc) {
-        if (doc.exists) {
-          final Map<String, dynamic> postData = doc.data();
-          final DocumentReference userRef = postData['uploadBy'];
-
-          userRef.get().then((DocumentSnapshot userDoc) {
-            if (userDoc.exists) {
-              setState(() {
-                _posts.add(
-                  PostModel.fromJson(
-                    postData,
-                    UserModel.fromJson(
-                      userDoc.data(),
-                    ),
-                  ),
-                );
-              });
-            }
-          });
-        }
-      });
-      setState(() {
-        _isLoading = false;
-      });
-    });
+    if (diff.inSeconds < 0) {
+      return "0 sec";
+    } else if (diff.inSeconds < 60) {
+      return "${diff.inSeconds.toString()} sec";
+    } else if (diff.inMinutes < 60) {
+      return "${diff.inMinutes.toString()} min";
+    } else if (diff.inHours < 24) {
+      return "${diff.inHours.toString()} hours";
+    }
+    return "${diff.inDays.toString()} days";
   }
 
   @override
   Widget build(BuildContext context) {
-    return this._isLoading
-        ? Container(
-            child: LinearProgressIndicator(),
-          )
-        : Container(
-            child: RefreshIndicator(
-              onRefresh: () {
-                return fetchPosts();
-              },
-              child: ListView.builder(
-                itemCount: _posts.length,
-                itemBuilder: (BuildContext context, int index) => Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                        blurRadius: 8,
-                        color: Color(0x22000000),
-                        offset: Offset(0, 4),
+    return Consumer2<User, PostsProvider>(builder: (BuildContext context,
+        User user, PostsProvider postsProvider, Widget child) {
+      return (!postsProvider.listAllPosts.isUploaded)
+          ? Container(
+              child: LinearProgressIndicator(),
+            )
+          : Container(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  postsProvider.refreshFetchAllPosts();
+                },
+                child: ListView.builder(
+                  itemCount: postsProvider.listAllPosts.posts.length,
+                  itemBuilder: (BuildContext context, int index) => Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 600,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(25.0),
                       ),
-                    ],
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 10,
-                  ),
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 5,
-                    vertical: 5,
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      Text(_posts[index].uploadBy.displayName),
-                      SizedBox(
-                        height: 5,
+                      child: Column(
+                        children: <Widget>[
+                          Column(
+                            children: <Widget>[
+                              ListTile(
+                                leading: Container(
+                                  width: 50.0,
+                                  height: 50.0,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black45,
+                                        offset: Offset(0, 2),
+                                        blurRadius: 6.0,
+                                      ),
+                                    ],
+                                  ),
+                                  child: CircleAvatar(
+                                    child: ClipOval(
+                                      child: postsProvider
+                                                  .listAllPosts
+                                                  .posts[index]
+                                                  .uploadBy
+                                                  .photoUrl !=
+                                              null
+                                          ? Image(
+                                              height: 50.0,
+                                              width: 50.0,
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(postsProvider
+                                                  .listAllPosts
+                                                  .posts[index]
+                                                  .uploadBy
+                                                  .photoUrl),
+                                            )
+                                          : Container(),
+                                    ),
+                                  ),
+                                ),
+                                title: Text(
+                                  postsProvider.listAllPosts.posts[index]
+                                      .uploadBy.displayName,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                subtitle: Text(this.getTimeDiff(postsProvider
+                                    .listAllPosts.posts[index].createAt)),
+                                trailing: IconButton(
+                                  icon: Icon(Icons.more_horiz),
+                                  color: Colors.black,
+                                  onPressed: () => print('More'),
+                                ),
+                              ),
+                              InkWell(
+                                onDoubleTap: () =>
+                                    postsProvider.likePost(index, user.uid),
+                                onTap: () {
+                                  /*Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => ViewPostScreen(
+                                    post: posts[index],
+                                  ),
+                                ),
+                              );*/
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.all(10.0),
+                                  width: double.infinity,
+                                  height: 400.0,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(25.0),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black54,
+                                        offset: Offset(0, 5),
+                                        blurRadius: 8.0,
+                                      ),
+                                    ],
+                                    image: DecorationImage(
+                                      image: NetworkImage(postsProvider
+                                          .listAllPosts.posts[index].photoUrl),
+                                      fit: BoxFit.fitWidth,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Row(
+                                          children: [
+                                            IconButton(
+                                              icon: Icon(Icons.favorite_border),
+                                              iconSize: 30.0,
+                                              onPressed: () => postsProvider
+                                                  .likePost(index, user.uid),
+                                            ),
+                                            Text(
+                                              postsProvider.listAllPosts
+                                                  .posts[index].likes.length
+                                                  .toString(),
+                                              style: TextStyle(
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: postsProvider.listAllPosts
+                                                    .posts[index].location !=
+                                                null
+                                            ? Row(
+                                                children: [
+                                                  Icon(Icons
+                                                      .location_on_outlined),
+                                                  Text(
+                                                    postsProvider.listAllPosts
+                                                        .posts[index].location,
+                                                    style: TextStyle(
+                                                      fontSize: 14.0,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            : Container(),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Text(
+                                          postsProvider.listAllPosts
+                                              .posts[index].caption,
+                                          style: TextStyle(
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: FadeInImage(
-                          placeholder: AssetImage('assets/img/logo.jpg'),
-                          image: NetworkImage(_posts[index].photoUrl),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      RichText(
-                        softWrap: true,
-                        text: TextSpan(
-                          style: TextStyle(color: Colors.black),
-                          children: <InlineSpan>[
-                            TextSpan(
-                              text: _posts[index].uploadBy.displayName + ': ',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            TextSpan(
-                              text: _posts[index].caption,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
+            );
+    });
   }
 }

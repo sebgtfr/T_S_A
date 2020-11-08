@@ -6,18 +6,21 @@ class TextInput extends StatelessWidget {
     @required this.labelText,
     @required this.obscured,
     @optionalTypeArgs this.icon,
+    @optionalTypeArgs this.maxLength,
   });
 
   final TextEditingController controller;
   final String labelText;
   final IconData icon;
   final bool obscured;
+  final int maxLength;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       obscureText: obscured,
+      maxLength: this.maxLength,
       decoration: InputDecoration(
         labelText: labelText,
         icon: (icon != null)

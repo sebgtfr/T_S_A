@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tsa_gram/Forms/ProfileForm.dart';
 
 import 'package:tsa_gram/models/Auth/Auth.dart';
 import 'package:tsa_gram/widgets/Button.dart';
@@ -12,6 +12,10 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final User user = Provider.of<User>(context);
+
+    if (user == null) {
+      return Container();
+    }
 
     return Column(
       children: <Widget>[
@@ -37,6 +41,7 @@ class ProfileScreen extends StatelessWidget {
             return null;
           },
         ),
+        ProfileForm(),
       ],
     );
   }
