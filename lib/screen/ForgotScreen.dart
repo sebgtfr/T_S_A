@@ -8,12 +8,12 @@ class ForgotScreen extends StatelessWidget {
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: const Text('Forgot password'),
-        backgroundColor: Color(0xFFE0F4FB),
+        backgroundColor: const Color(0xFFE0F4FB),
       ),
       body: SafeArea(
         child: Container(
           child: Column(
-            children: [
+            children: <Widget>[
               ForgotForm(),
             ],
           ),

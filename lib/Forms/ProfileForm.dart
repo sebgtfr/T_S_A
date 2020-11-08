@@ -27,7 +27,7 @@ class _ProfileFormState extends State<ProfileForm> {
 
   @override
   void initState() {
-    User user = Provider.of<User>(context, listen: false);
+    final User user = Provider.of<User>(context, listen: false);
 
     _displayNameController.text = user.displayName;
     super.initState();
@@ -41,7 +41,7 @@ class _ProfileFormState extends State<ProfileForm> {
           Form(
         key: _formKey,
         child: Column(
-          children: [
+          children: <Widget>[
             PickImage(
               onPicked: (File image, String filename) {
                 setState(() {
@@ -51,13 +51,13 @@ class _ProfileFormState extends State<ProfileForm> {
               },
               builder: (BuildContext context,
                       void Function(ImageSource) pickImage) =>
-                  this._image != null
+                  _image != null
                       ? Container(
                           child: InkWell(
                             onTap: () => pickImage(ImageSource.gallery),
                             child: Center(
                               child: Image.file(
-                                this._image,
+                                _image,
                                 height: 200,
                               ),
                             ),
@@ -65,7 +65,7 @@ class _ProfileFormState extends State<ProfileForm> {
                         )
                       : IconButton(
                           tooltip: 'Select from photo',
-                          icon: Icon(Icons.add_photo_alternate),
+                          icon: const Icon(Icons.add_photo_alternate),
                           onPressed: () => pickImage(ImageSource.gallery),
                         ),
             ),
@@ -75,34 +75,33 @@ class _ProfileFormState extends State<ProfileForm> {
               obscured: false,
               maxLength: 32,
             ),
-            SizedBox(height: 20),
-            uploader.isUploading
-                ? LinearProgressIndicator(
-                    value: uploader.progress,
-                    backgroundColor: Colors.grey,
-                  )
-                : Button(
-                    label: 'Update Profile',
-                    onValidate: () => _formKey.currentState.validate(),
-                    onSubmit: () {
-                      if (this._image != null) {
-                        uploader.upload(this._image,
-                            "users/${user.uid}/${this._imageFilename}",
-                            (final String pathFile) {
-                          _auth.updateUser(
-                              user, _displayNameController.text, pathFile);
-                          setState(() {
-                            this._image = null;
-                          });
-                        });
-                      } else if (_displayNameController.text !=
-                          user.displayName) {
-                        _auth.updateUser(
-                            user, _displayNameController.text, user.photoURL);
-                      }
-                      return null;
-                    },
-                  ),
+            const SizedBox(height: 20),
+            if (uploader.isUploading)
+              LinearProgressIndicator(
+                value: uploader.progress,
+                backgroundColor: Colors.grey,
+              )
+            else
+              Button(
+                label: 'Update Profile',
+                onValidate: () => _formKey.currentState.validate(),
+                onSubmit: () {
+                  if (_image != null) {
+                    uploader.upload(_image, 'users/${user.uid}/$_imageFilename',
+                        (final String pathFile) {
+                      _auth.updateUser(
+                          user, _displayNameController.text, pathFile);
+                      setState(() {
+                        _image = null;
+                      });
+                    });
+                  } else if (_displayNameController.text != user.displayName) {
+                    _auth.updateUser(
+                        user, _displayNameController.text, user.photoURL);
+                  }
+                  return null;
+                },
+              ),
           ],
         ),
       ),

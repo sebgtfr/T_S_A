@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-final Color logoColor = Color(0xFFE0F4FB);
+const Color logoColor = Color(0xFFE0F4FB);
 
-final kTextStyleProximaL = TextStyle(
+const TextStyle kTextStyleProximaL = TextStyle(
   fontFamily: 'proximaL',
 );
 
-final kTextStyleProximaR = TextStyle(
+const TextStyle kTextStyleProximaR = TextStyle(
   fontFamily: 'proximaR',
 );
 
-final kTextStyleProximaB = TextStyle(
+const TextStyle kTextStyleProximaB = TextStyle(
   fontFamily: 'proximaB',
 );
 
-final kTextStyleYellowMoon = TextStyle(
+const TextStyle kTextStyleYellowMoon = TextStyle(
   fontFamily: 'YellowMoon',
 );

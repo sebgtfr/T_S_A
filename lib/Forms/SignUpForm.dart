@@ -22,7 +22,7 @@ class SignUpFormState extends State<SignUpForm> {
     return Form(
       key: _formKey,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 30),
+        margin: const EdgeInsets.symmetric(horizontal: 30),
         child: Column(
           children: <Widget>[
             TextInput(
@@ -31,21 +31,21 @@ class SignUpFormState extends State<SignUpForm> {
               icon: Icons.account_circle,
               obscured: false,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextInput(
               controller: _emailController,
               labelText: 'Email',
               icon: Icons.alternate_email,
               obscured: false,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextInput(
               controller: _passwordController,
               labelText: 'Password',
               icon: Icons.lock,
               obscured: true,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Button(
               label: 'Sign In',
               onSubmit: () => _auth.signUp(
