@@ -52,7 +52,7 @@ class _PostFormState extends State<PostForm> {
               controller: _captionController,
               labelText: 'Caption',
               obscured: false,
-              maxLength: 170,
+              maxLength: 140,
             ),
             SizedBox(height: 20),
             Row(
