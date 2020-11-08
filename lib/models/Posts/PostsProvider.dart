@@ -64,7 +64,7 @@ class PostsProvider extends ChangeNotifier {
       'photoUrl': post.photoUrl,
       'caption': post.caption,
       'location': post.location,
-      'likes': [],
+      'likes': List<String>(),
       'uploadBy': _auth.db.doc("users/" + userUId),
       'createAt': FieldValue.serverTimestamp(),
     });

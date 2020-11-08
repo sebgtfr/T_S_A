@@ -41,8 +41,8 @@ class Uploader extends ChangeNotifier {
       if (event.state == TaskState.success) {
         event.ref.getDownloadURL().then((final String pathFile) {
           this._isUploading = false;
-          notifyListeners();
           onComplete(pathFile);
+          notifyListeners();
         });
       } else {
         this._progress =
