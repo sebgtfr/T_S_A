@@ -5,9 +5,21 @@ import 'package:tsa_gram/Forms/ProfileForm.dart';
 
 import 'package:tsa_gram/models/Auth/Auth.dart';
 import 'package:tsa_gram/widgets/Button.dart';
-import 'package:tsa_gram/widgets/PickImage.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  bool modifyProfil = true;
+
+  void changeProfil() {
+    setState(() {
+      modifyProfil = !modifyProfil;
+    });
+  }
+
   final Auth _auth = Auth();
 
   @override
@@ -29,30 +41,50 @@ class ProfileScreen extends StatelessWidget {
         ),
         child: Column(
           children: <Widget>[
-            Row(
-              children: [
-                if (user.photoURL != null)
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: Image(
-                      image: NetworkImage(user.photoURL),
-                      width: 70,
-                      height: 70,
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                else
-                  Container(),
-                const SizedBox(width: 20),
-                if (user.displayName != null)
-                  Text(user.displayName,
-                      style: const TextStyle(fontWeight: FontWeight.bold))
-                else
-                  Container(),
-              ],
+            GestureDetector(
+              onTap: () {},
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  if (modifyProfil)
+                    Row(
+                      // ignore: always_specify_types
+                      children: [
+                        if (user.photoURL != null)
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: Image(
+                              image: NetworkImage(user.photoURL),
+                              width: 70,
+                              height: 70,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        else
+                          Container(),
+                        const SizedBox(width: 20),
+                        if (user.displayName != null)
+                          Text(user.displayName,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold))
+                        else
+                          Container(),
+                      ],
+                    )
+                  else
+                    ProfileForm(),
+                  const SizedBox(height: 20),
+                  Button(
+                      label: 'Modify profil',
+                      onSubmit: () {
+                        changeProfil();
+                        return null;
+                      }),
+                ],
+              ),
             ),
-            ProfileForm(),
-            const SizedBox(height: 50),
+            // ProfileForm(),
+            const SizedBox(height: 20),
             Button(
               label: 'Logout',
               onSubmit: () {
